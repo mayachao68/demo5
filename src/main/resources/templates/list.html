@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/css.css">
+    <script type="text/javascript" src="/webjars/jquery/2.2.4/jquery.min.js"></script>
+    <script>
+    function deleteall() {
+        ids="";
+        $(":input:checkbox:checked").map(function (i,n) {
+            ids+=","+n.value;
+        })
+        ids=ids.substring(1);
+        $.post(
+            "deleteall",
+            {ids:ids},
+            function (data) {
+                if (data=="ok"){
+                    alert("删除成功");
+                    location.href="list";
+                } else {
+                    alert("删除失败")
+                    location.reload();
+                }
+            }
+        )
+    }
+    function toupdate() {
+        ids="";
+        $(":input:checkbox:checked").map(function (i,n) {
+            ids+=","+n.value;
+        })
+        ids=ids.substring(1);
+        alert(ids);
+        location.href="toupdate?id="+ids;
+    }
+
+    $(function () {
+        $.post(
+            "distinction",
+            function (data) {
+                for (var i in data){
+                    $("[name='distinction']").append("<option th:value='data[i].dname'>"+data[i].dname+"</option>")
+                }
+            },"json"
+        )
+
+       $("[name='distinction']").change(function () {
+
+           var dname=$("[name='distinction']").val();
+            $("[name='clazz']").empty();
+            $.post(
+                "clazz",
+                {dname:dname},
+                function (data) {
+                    for (var i in data){
+                        $("[name='clazz']").append("<option th:value='data[i].cname'>"+data[i].cname+"</option>")
+                    }
+                },"json"
+            )
+        })
+    })
+    </script>
+</head>
+<body>
+    <select name="distinction">
+        <option th:text="${distinction}"></option>
+        <option></option>
+    </select>
+    <select name="clazz">
+        <option th:text="${clazz}"></option>
+        <option></option>
+    </select>
+    <form action="/list" method="post">
+    <input type="text" name="mohu" th:value="${mohu}" placeholder="学号/姓名">
+    <input type="submit" value="查询"><br>
+    <br><button><a th:href="export">导出</a></button>
+    <input type="button" value="删除" onclick="deleteall()">
+    <input type="button" value="修改" onclick="toupdate()">
+    <button><a href="/times">时间</a></button>
+</form>
+<table>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>届别</td>
+        <td>班级名称</td>
+        <td>学号</td>
+        <td>姓名</td>
+        <td>出生日期</td>
+        <td>性别</td>
+        <td>状态</td>
+        <td>民族</td>
+        <td>电话</td>
+        <td>入学日期</td>
+        <td>备注</td>
+    </tr>
+    <tr th:each="m:${list}">
+        <td><input type="checkbox" th:value="${m.sid}"></td>
+        <td th:text="${m.sid}"></td>
+        <td th:text="${m.distinction}"></td>
+        <td th:text="${m.clazz}"></td>
+        <td th:text="${m.num}"></td>
+        <td th:text="${m.name}"></td>
+        <td th:text="${m.birthday}"></td>
+        <td th:text="${m.sex}"></td>
+        <td th:text="${m.status}"></td>
+        <td th:text="${m.nation}"></td>
+        <td th:text="${m.phone}"></td>
+        <td th:text="${m.enrollmentdate}"></td>
+        <td th:text="${m.remark}"></td>
+    </tr>
+    <tr>
+        <td colspan="13">
+            <a th:href="@{/list(pageNum=1,mohu=${mohu})}">首页</a>
+            <a th:href="@{/list(pageNum=${pageInfo.prePage},mohu=${mohu})}">上一页</a>
+            <a th:href="@{/list(pageNum=${pageInfo.nextPage},mohu=${mohu})}">下一页</a>
+            <a th:href="@{/list(pageNum=${pageInfo.lastPage},mohu=${mohu})}">尾页</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

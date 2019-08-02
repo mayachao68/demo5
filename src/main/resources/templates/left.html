@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="static/css/css.css">
+    <script type="text/javascript" src="/webjars/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript" src="static/js/jquery.ztree.all.min.js"></script>
+    <link rel="stylesheet" href="static/css/zTreeStyle/zTreeStyle.css" type="text/css">
+
+</head>
+<SCRIPT type="text/javascript" >
+    $(function(){
+        $.ajaxSetup({
+            async:false
+        })
+        var zTreeObj,
+        setting = {
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "pid",
+                    rootPId: 0
+                }
+            }
+        },
+         zTreeNodes
+        $.post(
+            "menulist",
+            function(data) {
+                zTreeNodes=data;
+            },"json")
+        zTreeObj = $.fn.zTree.init($("#tree"), setting, zTreeNodes);
+    })
+</SCRIPT>
+<body>
+<ul id="tree" class="ztree" style="width:230px; overflow:auto;"></ul>
+</body>
+</html>

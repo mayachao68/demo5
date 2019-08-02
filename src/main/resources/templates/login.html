@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="static/css/css.css">
+    <script type="text/javascript" src="/webjars/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript" src="static/js/jquery.cookie.js"></script>
+    <script>
+        $(function () {
+            setTimeout(autoLogin,2000);
+        })
+        function autoLogin() {
+            var value=$.cookie('token');
+            if (value){
+                location.href="/LoginByToken?token="+value;
+            }
+        }
+        function login() {
+          $.post(
+               "login",
+               $("form").serialize(),
+               function (data) {
+                    if (data=="ok"){
+                       alert("登陆成功");
+                       location.href="main";
+                  } else if(data=="ri"){
+                        alert("验证码错误");
+                    }
+                  else {
+                        alert("登陆失败");
+                        location.reload();
+                     }
+                }
+            )
+        }
+        $(function () {
+            $("#tu").click(function () {
+                $(this).attr("src","yanz?d="+Math.random())
+            })
+        })
+
+    </script>
+</head>
+<body>
+<span style="color: red" th:text="${session.error}"></span>
+<form action="" method="post">
+    <table>
+        <tr>
+            <td>用户名</td>
+            <td><input type="text" name="username"></td>
+        </tr>
+        <tr>
+            <td>密码</td>
+            <td><input type="text" name="password"></td>
+        </tr>
+        <tr>
+            <td>验证码</td>
+            <td>
+            <input type="text" name="yanz">
+                <img src="yanz" width="150px"height="40px" id="tu">点击图片重置验证码！
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="checkbox" value="1" name="auto">自动登陆
+                <input type="button" value="登陆" onclick="login()">
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

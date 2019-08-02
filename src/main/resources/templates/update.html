@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="static/css/css.css">
+    <script type="text/javascript" src="/webjars/jquery/2.2.4/jquery.min.js"></script>
+    <script>
+        function update() {
+            $.post(
+                "updateManagement",
+                $("form").serialize(),
+                function (data) {
+                    if (data=="ok"){
+                        alert("修改成功");
+                        location.href="list";
+                    } else {
+                        alert("修改失败");
+                        location.reload();
+                    }
+                }
+
+            )
+        }
+    </script>
+</head>
+<body>
+<form action="" method="post">
+    <table>
+        <tr>
+            <td>届别</td>
+            <td>
+                <input type="hidden" th:value="${management.sid}" name="sid">
+                <input type="text" th:value="${management.distinction}" name="distinction">
+            </td>
+        </tr>
+        <tr>
+            <td>班级名称</td>
+            <td><input type="text" th:value="${management.clazz}" name="clazz"></td>
+        </tr>
+        <tr>
+            <td>学号</td>
+            <td><input type="text" th:value="${management.num}" name="num"></td>
+        </tr>
+        <tr>
+            <td>姓名</td>
+            <td><input type="text" th:value="${management.name}" name="name"></td>
+        </tr>
+        <tr>
+            <td>出生日期</td>
+            <td><input type="date" th:value="${management.birthday}" name="birthday"></td>
+        </tr>
+        <tr>
+            <td>性别</td>
+            <td><input type="text" th:value="${management.sex}" name="sex"></td>
+        </tr>
+        <tr>
+            <td>状态</td>
+            <td><input type="text" th:value="${management.status}" name="status"></td>
+        </tr>
+        <tr>
+            <td>民族</td>
+            <td><input type="text" th:value="${management.nation}" name="nation"></td>
+        </tr>
+        <tr>
+            <td>电话</td>
+            <td><input type="text" th:value="${management.phone}" name="phone"></td>
+        </tr>
+        <tr>
+            <td>入学日期</td>
+            <td><input type="date" th:value="${management.enrollmentdate}" name="enrollmentdate"></td>
+        </tr>
+        <tr>
+            <td>备注</td>
+            <td><input type="text" th:value="${management.remark}" name="remark"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="button" value="修改" onclick="update()" ></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

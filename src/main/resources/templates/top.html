@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="static/css/css.css">
+    <script type="text/javascript" src="/webjars/jquery/2.2.4/jquery.min.js"></script>
+    <script>
+        function outlogin() {
+            top.location.href="outlogin";
+        }
+    </script>
+</head>
+<body>
+<h1 style="color: red">欢迎<span th:text="${session.user.username}"></span>登陆</h1>
+<input type="button" onclick="outlogin()" value="注销">
+</body>
+</html>
